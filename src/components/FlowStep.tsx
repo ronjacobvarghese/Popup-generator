@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Input from "./ui/Input";
 import Select from "./ui/Select";
-import { MenuItem, Switch, Menu, MenuList } from "@mui/material";
+import { MenuItem, Switch, Menu } from "@mui/material";
 import {
-  ConfigItem,
+  FlowData,
   PopupContentTypes,
   PopupLoadTypes,
   PopupTypes,
@@ -14,25 +14,20 @@ import { FaTrashCan } from "react-icons/fa6";
 type Props = {
   popupType: PopupTypes | "";
   step: number;
-  configItem?: ConfigItem;
-  onAdd: (item: Partial<ConfigItem>) => void;
+  flowData?: FlowData;
+  onAdd: (item: Partial<FlowData>) => void;
 };
 
-export default function FlowStep({
-  step,
-  configItem,
-  popupType,
-  onAdd,
-}: Props) {
-  const [id, setId] = useState(configItem?.id ? configItem.id : "");
+export default function FlowStep({ step, flowData, popupType, onAdd }: Props) {
+  const [id, setId] = useState(flowData?.id ? flowData.id : "");
   const [load, setLoad] = useState<PopupLoadTypes | "">(
-    configItem?.loadType ? configItem.loadType : ""
+    flowData?.loadType ? flowData.loadType : ""
   );
   const [contentType, setContentType] = useState<PopupContentTypes | "">(
-    configItem?.contentType ? configItem.contentType : ""
+    flowData?.contentType ? flowData.contentType : ""
   );
   const [question, setQuestion] = useState(
-    configItem?.question ? configItem.question : ""
+    flowData?.question ? flowData.question : ""
   );
 
   const [optionsAnchor, setOptionsAnchor] = useState<null | HTMLElement>(null);

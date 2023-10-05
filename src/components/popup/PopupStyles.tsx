@@ -1,4 +1,4 @@
-export const styles = `
+export const PopupStyles = `
   .popup-root-backdrop *{
     margin:0px;
     padding:0px;
@@ -11,9 +11,9 @@ export const styles = `
     left:0;
     z-index : 1000;
     position:absolute;
-    background-color: rgba(89, 89, 89, 0.64);
-    width: 100vw;
-    height:100vh;
+    background-color: rgba(255, 255, 255, 0.05);
+    width: 100%;
+    height:100%;
   }
   
   .popup-root-component{

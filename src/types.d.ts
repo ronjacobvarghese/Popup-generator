@@ -4,7 +4,7 @@ export type PopupContentTypes = "Options" | "Text" | "Rating" | "TextField" |"Ch
 export type PopupActionType = "Submit" | "Continue";
 export type PopupLoadTypes = "onPageLoad" | "onButtonClick";
 
-export type ConfigItem = {
+export type FlowData = {
   id: string;
   loadType: PopupLoadTypes;
   question: string;
@@ -12,3 +12,10 @@ export type ConfigItem = {
   options?: string[]
   isRequired?:boolean
 };
+
+export type ConfigData = {
+  time:number;
+  timeFormat: "seconds"|"minutes"|"hours";
+  displayLimit:number;
+  frequency:number;
+}
