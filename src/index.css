@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+#root, html,body{
+  @apply w-full h-full;
+}
+
+.form-details>div{
+  @apply flex flex-col gap-4 m-6 
+}
+
+.form-details>div>div{
+  @apply flex gap-4 items-center text-lg
+}
+
+.step-details>li{
+  @apply flex gap-2 items-center !w-fit;
+}
+
+.step-details>li:not(:first-child):not(:nth-child(2))::before{
+  content: " ";
+  @apply bg-gray-600/60 w-[2px] h-6 mr-1
+}
+
+.MuiSelect-icon{
+  @apply !fill-gray-200
+}
+
+::-webkit-scrollbar {
+  /* Customize the scrollbar width */
+  @apply !w-1 h-2
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-400/20 
+  /* Customize the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400/40 rounded-full
+  /* Customize the scrollbar thumb */
+}
