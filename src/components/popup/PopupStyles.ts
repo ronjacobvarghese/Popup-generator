@@ -19,12 +19,13 @@ export const PopupStyles = `
   .popup-root-component{
     position:relative;
     background-color:white;
-    justify-content:center;
-    align-items:center;
+    display:flex;
+    flex-direction:column;
     min-width:400px;
     min-height:200px;
     width:fit-content;
     max-width:800px;
+    height:fit-content;
     border-radius:6px;
   }
 
@@ -41,7 +42,12 @@ export const PopupStyles = `
   .popup-header-component h1{
     margin:0;
     width:100%;
-    
+    display:flex;
+  }
+
+  .popup-header-component h1 p{
+    color:red;
+    font-size:1rem;
   }
   
   .popup-header-component svg{
@@ -51,15 +57,15 @@ export const PopupStyles = `
   }
   
   .popup-content-component{
+    width:100%;
     padding:1rem;
   }
 
   .popup-actions-component{
-    position:absolute;
-    bottom:0;
-    padding:1rem;
-    right:0;
+    width:100%;
+    padding:0 1rem 1rem 1rem;
     display:flex;
+    justify-content:flex-end;
     gap:1rem;
   }
 

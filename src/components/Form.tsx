@@ -29,7 +29,7 @@ export default function Form() {
   };
 
   return (
-    <section className="px-10 py-6 w-1/2">
+    <section className="pl-10 pr-5 py-6 w-full">
       <form
         onSubmit={(e) => customizePopup(e)}
         className="text-white/70 bg-gray-600/20 border relative border-white/40 rounded-lg  p-4 form-details"

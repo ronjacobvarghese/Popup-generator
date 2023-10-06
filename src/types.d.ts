@@ -6,7 +6,8 @@ export type PopupLoadTypes = "onPageLoad" | "onButtonClick";
 
 export type FlowData = {
   id: string;
-  loadType: PopupLoadTypes;
+  step:number;
+  loadType?: PopupLoadTypes;
   question: string;
   contentType?: PopupContentTypes;
   options?: string[]

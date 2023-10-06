@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { ConfigData, FlowData } from "../types";
+import React, { useState, useContext, useEffect } from "react";
+import { ConfigData, FlowData, PopupTypes } from "../types";
 
 type Props = {
   children: React.ReactNode;
@@ -10,13 +10,22 @@ type PopupDataContextType = {
   setConfigData: React.Dispatch<React.SetStateAction<ConfigData | null>>;
   flowData: FlowData[];
   setFlowData: React.Dispatch<React.SetStateAction<FlowData[]>>;
+  popupType: PopupTypes | "";
+  setPopupType: React.Dispatch<React.SetStateAction<PopupTypes | "">>;
 };
 
 const PopupDataContext = React.createContext<PopupDataContextType | null>(null);
 
 export default function PopupDataContextProvider({ children }: Props) {
+  const [popupType, setPopupType] = useState<PopupTypes | "">("");
   const [configData, setConfigData] = useState<ConfigData | null>(null);
   const [flowData, setFlowData] = useState<FlowData[]>([]);
+
+  useEffect(() => {
+    if (popupType) {
+      setFlowData([]);
+    }
+  }, [popupType]);
 
   return (
     <PopupDataContext.Provider
@@ -25,6 +34,8 @@ export default function PopupDataContextProvider({ children }: Props) {
         setConfigData,
         flowData,
         setFlowData,
+        popupType,
+        setPopupType,
       }}
     >
       {children}

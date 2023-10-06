@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FlowStep from "./FlowStep";
 import { FlowData, PopupTypes } from "../types";
 import Select from "./ui/Select";
@@ -6,50 +6,40 @@ import { MenuItem } from "@mui/material";
 import { usePopupDataContext } from "../context/PopupDataContextProvider";
 
 export default function FlowChart() {
-  const { flowData, setFlowData } = usePopupDataContext();
-  const [type, setType] = useState<PopupTypes | "">("");
+  const {
+    flowData,
+    setFlowData,
+    popupType: type,
+    setPopupType,
+  } = usePopupDataContext();
   const [errorMsg, setErrorMsg] = useState("");
+  const [initFlowStep, setInitFlowStep] = useState(true);
+  const [data, setData] = useState(flowData);
 
-  const onAddStep = (flowDataItem: Partial<FlowData>) => {
-    console.log(type);
-    if (!flowDataItem.id || !flowDataItem.id.trim()) {
-      setErrorMsg("Please enter a valid Id");
-      return;
+  useEffect(() => {
+    setData(flowData);
+  }, [flowData]);
+
+  const onSubmitStep = (flowDataItem: FlowData) => {
+    setFlowData([...data, flowDataItem]);
+    setInitFlowStep(false);
+  };
+
+  const onAddStep = (flowDataItem: FlowData) => {
+    if (!flowData.find((item) => item.id === flowDataItem.id)) {
+      setData((state) => [...state, flowDataItem]);
     }
+    setInitFlowStep(true);
+  };
 
-    if (flowData.find((item) => item.id === flowDataItem.id)) {
-      setErrorMsg("The Id of each step must be unique!!");
-      return;
+  const deleteFlowStep = (step: number) => {
+    console.log(step);
+    setFlowData((state) => state.filter((_item, index) => index !== step - 1));
+    if (step !== 1 && step === data.length + 1) {
+      setInitFlowStep(false);
+    } else {
+      setInitFlowStep(true);
     }
-
-    if (!flowDataItem.loadType || !flowDataItem.loadType.trim()) {
-      setErrorMsg("Please enter a valid load type");
-      return;
-    }
-
-    if (
-      type === "Survey" &&
-      (!flowDataItem.contentType || !flowDataItem.contentType.trim())
-    ) {
-      setErrorMsg("Please enter a valid content type");
-      return;
-    }
-
-    if (!flowDataItem.question || !flowDataItem.question.trim()) {
-      setErrorMsg("Please enter a valid message");
-      return;
-    }
-
-    if (
-      flowDataItem.contentType &&
-      (flowDataItem.contentType === "Options" ||
-        flowDataItem.contentType === "CheckList") &&
-      !flowDataItem.options
-    ) {
-      setErrorMsg("Please enter valid options");
-    }
-
-    setFlowData((state) => [...state, flowDataItem as FlowData]);
   };
 
   return (
@@ -59,7 +49,7 @@ export default function FlowChart() {
       </h3>
       <div className="absolute top-6 left-40 flex gap-2 items-center ">
         <label>Popup type:</label>
-        <Select<PopupTypes | ""> value={type} setChange={setType}>
+        <Select<PopupTypes | ""> value={type} setChange={setPopupType}>
           <MenuItem value="Warning"> Warning</MenuItem>
           <MenuItem value="Error"> Error</MenuItem>
           <MenuItem value="Survey"> Survey</MenuItem>
@@ -67,21 +57,31 @@ export default function FlowChart() {
         {errorMsg && <p className="text-xl text-red-600 pl-10">{errorMsg}</p>}
       </div>
       <ul className="overflow-auto flex-1">
-        {flowData.map((item, index) => (
+        {data.map((item, index) => (
           <FlowStep
             key={item.id}
             step={index + 1}
             popupType={type}
             flowData={item}
+            onSubmit={onSubmitStep}
             onAdd={onAddStep}
+            onDelete={deleteFlowStep}
+            setError={setErrorMsg}
+            generate={!initFlowStep && flowData.length - 1 === index}
           />
         ))}
-        <FlowStep
-          key={Math.random()}
-          step={flowData.length + 1}
-          onAdd={onAddStep}
-          popupType={type}
-        />
+        {initFlowStep && (
+          <FlowStep
+            key={Math.random()}
+            step={flowData.length + 1}
+            onSubmit={onSubmitStep}
+            onAdd={onAddStep}
+            popupType={type}
+            setError={setErrorMsg}
+            onDelete={deleteFlowStep}
+            generate
+          />
+        )}
       </ul>
     </section>
   );

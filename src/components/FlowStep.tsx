@@ -15,10 +15,23 @@ type Props = {
   popupType: PopupTypes | "";
   step: number;
   flowData?: FlowData;
-  onAdd: (item: Partial<FlowData>) => void;
+  onSubmit: (item: FlowData) => void;
+  onAdd: (item: FlowData) => void;
+  onDelete: (step: number) => void;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+  generate?: boolean;
 };
 
-export default function FlowStep({ step, flowData, popupType, onAdd }: Props) {
+export default function FlowStep({
+  step,
+  flowData,
+  popupType,
+  onSubmit,
+  onAdd,
+  onDelete,
+  generate,
+  setError,
+}: Props) {
   const [id, setId] = useState(flowData?.id ? flowData.id : "");
   const [load, setLoad] = useState<PopupLoadTypes | "">(
     flowData?.loadType ? flowData.loadType : ""
@@ -39,15 +52,54 @@ export default function FlowStep({ step, flowData, popupType, onAdd }: Props) {
 
   const [isRequired, setIsRequired] = useState(true);
 
-  const onAddNewStep = () => {
+  const onSubmitNewStep = (generate: boolean) => {
+    if (!popupType) {
+      setError("Please enter a valid popup type");
+      return;
+    }
+    if (!id.trim()) {
+      setError("Please enter a valid Id");
+      return;
+    }
+
+    if (step === 1 && !load) {
+      setError("Please enter a valid load type");
+      return;
+    }
+
+    if (popupType === "Survey" && !contentType) {
+      setError("Please enter a valid content type");
+      return;
+    }
+
+    if (!question.trim()) {
+      setError("Please enter a valid message");
+      return;
+    }
+
+    if (
+      (contentType === "Options" || contentType === "CheckList") &&
+      !options
+    ) {
+      setError("Please enter valid options");
+      return;
+    }
+
     const data = {
       id,
+      step,
       loadType: load ? load : undefined,
       contentType: contentType ? contentType : undefined,
       question,
+      isRequired,
+      options,
     };
 
-    onAdd(data);
+    if (generate) {
+      onSubmit(data);
+    } else {
+      onAdd(data);
+    }
   };
 
   const onRemoveOptions = (deletedIndex: number) => {
@@ -56,7 +108,7 @@ export default function FlowStep({ step, flowData, popupType, onAdd }: Props) {
     );
   };
 
-  const onAddOptions = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitOptions = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!option.trim()) {
       return;
@@ -68,7 +120,7 @@ export default function FlowStep({ step, flowData, popupType, onAdd }: Props) {
   };
 
   return (
-    <li className="flex justify-between items-center min-w-max mb-6 py-2 relative">
+    <li className="flex justify-between items-center min-w-max mb-6 py-2 ">
       <ul className="flex gap-4 step-details !w-fit">
         <li>
           <h3>{step}.</h3>
@@ -156,7 +208,7 @@ export default function FlowStep({ step, flowData, popupType, onAdd }: Props) {
                 onClose={() => setAddOptionsAnchor(null)}
               >
                 <MenuItem>
-                  <form onSubmit={onAddOptions} className="flex gap-4">
+                  <form onSubmit={onSubmitOptions} className="flex gap-4">
                     <Input
                       value={option}
                       isNotCenter
@@ -201,20 +253,32 @@ export default function FlowStep({ step, flowData, popupType, onAdd }: Props) {
       </ul>
 
       {/* ------------------------Actions Type-------------------------------*/}
-
-      {id && popupType === "Survey" && (
-        <div className="flex gap-2 px-4">
+      <div className="flex gap-2 px-4">
+        {generate && (
           <button
-            onClick={onAddNewStep}
-            className="bg-gray-950 flex items-center gap-2 px-4 py-1 rounded-md shadow-gray-600/20 text-lg shadow-md"
+            className="px-4 py-2 bg-gray-600/60 rounded-md"
+            onClick={() => onSubmitNewStep(true)}
           >
-            <AiOutlinePlus /> Add
+            Generate
           </button>
-          <button className="bg-gray-950 flex items-center gap-2 p-2 rounded-md shadow-gray-600/20 text-lg shadow-md">
-            <FaTrashCan />
-          </button>
-        </div>
-      )}
+        )}
+        {id && popupType === "Survey" && (
+          <>
+            <button
+              onClick={() => onSubmitNewStep(false)}
+              className="bg-gray-950 flex items-center gap-2 px-4 py-1 rounded-md shadow-gray-600/20 text-lg shadow-md"
+            >
+              <AiOutlinePlus /> Add
+            </button>
+            <button
+              onClick={() => onDelete(step)}
+              className="bg-gray-950 flex items-center gap-2 p-2 rounded-md shadow-gray-600/20 text-lg shadow-md"
+            >
+              <FaTrashCan />
+            </button>
+          </>
+        )}
+      </div>
     </li>
   );
 }
