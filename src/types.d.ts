@@ -7,11 +7,11 @@ export type PopupLoadTypes = "onPageLoad" | "onButtonClick";
 export type FlowData = {
   id: string;
   step:number;
-  loadType?: PopupLoadTypes;
+  // loadType?: PopupLoadTypes;
   question: string;
   contentType?: PopupContentTypes;
-  options?: string[]
-  isRequired?:boolean
+  // options?: string[]
+  // isRequired?:boolean
 };
 
 export type ConfigData = {

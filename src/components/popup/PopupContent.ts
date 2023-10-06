@@ -16,7 +16,7 @@ export default function PopupContent({flowData, popupType}:Props) {
     let question;
     
     if(popupType === "Survey" && item.contentType!="Text"){
-      question = `${item.question}<p style = "color:red;width:10px;height:10px;">${item.isRequired ? "*":""}</p>`
+      question = item.question
     } else{
       question = popupType;
     }
@@ -25,6 +25,7 @@ export default function PopupContent({flowData, popupType}:Props) {
         =`<div class = "popup-header-component">
             ${svg}
             <h1>${question}</h1>
+            <button class = "popup-close-component">${svgs['Close']}</button>
           </div>`
           
     let content;
@@ -70,7 +71,7 @@ export default function PopupContent({flowData, popupType}:Props) {
     } else{
       footer = `<footer "  class = "popup-actions-component">
       <div>
-      <button>Ok</button>
+      <button class = "popup-close-component">Ok</button>
       </div>
     </footer>`   
     }

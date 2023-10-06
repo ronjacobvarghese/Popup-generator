@@ -9,7 +9,6 @@ export default function LiveWindow() {
   const liveWindowRef = useRef<HTMLElement>(null);
   const styles = PopupStyles;
   const content = PopupContent({ flowData, popupType });
-  const scripts = PopupScripts(content);
 
   const nextClassName = "popup-actions-component-next";
   const ratingClassName = "popup-content-rating-button";
@@ -31,10 +30,11 @@ export default function LiveWindow() {
 
   useEffect(() => {
     if (liveWindowRef.current) {
-      if (flowData.length !== 0) {
+      if (configData && flowData.length !== 0) {
         const head = liveWindowRef.current
           .parentElement as NonNullable<HTMLHeadElement>;
 
+        const scripts = PopupScripts(configData, content);
         const script = document.createElement("script");
         script.innerHTML = scripts;
         head.appendChild(script);
@@ -49,7 +49,7 @@ export default function LiveWindow() {
           " text-xl font-semibold text-gray-400/60 w-full pr-10 pl-5 py-10 flex items-center justify-center";
       }
     }
-  }, [flowData, content]);
+  }, [flowData, configData, content]);
 
   return <section ref={liveWindowRef}></section>;
 }

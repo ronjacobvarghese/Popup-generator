@@ -31,6 +31,7 @@ export const PopupStyles = `
   }
 
   .popup-header-component{
+    position:relative
     width:100%;
     padding: 0.5rem 1rem;
     border-bottom:1px solid lightgrey;
@@ -46,9 +47,10 @@ export const PopupStyles = `
     display:flex;
   }
 
-  .popup-header-component h1 p{
-    color:red;
-    font-size:1rem;
+  .popup-header-component button{
+    position:absolute;
+    top:15px;
+    right:25px;
   }
   
   .popup-header-component svg{

@@ -33,9 +33,9 @@ export default function FlowStep({
   setError,
 }: Props) {
   const [id, setId] = useState(flowData?.id ? flowData.id : "");
-  const [load, setLoad] = useState<PopupLoadTypes | "">(
-    flowData?.loadType ? flowData.loadType : ""
-  );
+  // const [load, setLoad] = useState<PopupLoadTypes | "">(
+  //   flowData?.loadType ? flowData.loadType : ""
+  // );
   const [contentType, setContentType] = useState<PopupContentTypes | "">(
     flowData?.contentType ? flowData.contentType : ""
   );
@@ -43,14 +43,14 @@ export default function FlowStep({
     flowData?.question ? flowData.question : ""
   );
 
-  const [optionsAnchor, setOptionsAnchor] = useState<null | HTMLElement>(null);
-  // const [options, setOptions] = useState<string[]>([]);
-  // const [option, setOption] = useState<string>("");
-  const [addOptionsAnchor, setAddOptionsAnchor] = useState<null | HTMLElement>(
-    null
-  );
+  // const [optionsAnchor, setOptionsAnchor] = useState<null | HTMLElement>(null);
+  // // const [options, setOptions] = useState<string[]>([]);
+  // // const [option, setOption] = useState<string>("");
+  // const [addOptionsAnchor, setAddOptionsAnchor] = useState<null | HTMLElement>(
+  //   null
+  // );
 
-  const [isRequired, setIsRequired] = useState(true);
+  // const [isRequired, setIsRequired] = useState(true);
 
   const onSubmitNewStep = (generate: boolean) => {
     if (!popupType) {
@@ -62,10 +62,10 @@ export default function FlowStep({
       return;
     }
 
-    if (step === 1 && !load) {
-      setError("Please enter a valid load type");
-      return;
-    }
+    // if (step === 1 && !load) {
+    //   setError("Please enter a valid load type");
+    //   return;
+    // }
 
     if (popupType === "Survey" && !contentType) {
       setError("Please enter a valid content type");
@@ -88,10 +88,10 @@ export default function FlowStep({
     const data = {
       id,
       step,
-      loadType: load ? load : undefined,
+      // loadType: load ? load : undefined,
       contentType: contentType ? contentType : undefined,
       question,
-      isRequired,
+      // isRequired,
       // options,
     };
 
@@ -132,7 +132,7 @@ export default function FlowStep({
 
         {/* -------------------Load Type And Content Type------------------*/}
 
-        {id && step === 1 && (
+        {/* {id && step === 1 && (
           <li>
             <p>Load Type:</p>
             <Select value={load} setChange={setLoad}>
@@ -140,16 +140,16 @@ export default function FlowStep({
               <MenuItem value="onButtonClick">On Button Click</MenuItem>
             </Select>
           </li>
-        )}
+        )} */}
         {id && popupType === "Survey" && (
           <li>
             <p> Content Type:</p>
             <Select value={contentType} setChange={setContentType}>
-              <MenuItem value="Options"> Options </MenuItem>
+              {/* <MenuItem value="Options"> Options </MenuItem> */}
               <MenuItem value="Text"> Text </MenuItem>
               <MenuItem value="Rating"> Rating </MenuItem>
               <MenuItem value="TextField"> Text Field </MenuItem>
-              <MenuItem value="CheckList"> Check List </MenuItem>
+              {/* <MenuItem value="CheckList"> Check List </MenuItem> */}
             </Select>
           </li>
         )}
@@ -241,7 +241,7 @@ export default function FlowStep({
             />
           </li>
         )}
-        {id && contentType && contentType !== "Text" && (
+        {/* {id && contentType && contentType !== "Text" && (
           <li>
             <p>Is Required(*):</p>
             <Switch
@@ -249,7 +249,7 @@ export default function FlowStep({
               onChange={(e) => setIsRequired(e.target.checked)}
             />
           </li>
-        )}
+        )} */}
       </ul>
 
       {/* ------------------------Actions Type-------------------------------*/}
