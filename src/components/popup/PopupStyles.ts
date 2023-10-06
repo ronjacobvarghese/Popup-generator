@@ -11,16 +11,17 @@ export const PopupStyles = `
     left:0;
     z-index : 1000;
     position:absolute;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(0,0, 0, 0.50);
     width: 100%;
     height:100%;
   }
   
   .popup-root-component{
-    position:relative;
+    position:absolute;
     background-color:white;
     display:flex;
     flex-direction:column;
+    justify-content:space-evenly;
     min-width:400px;
     min-height:200px;
     width:fit-content;
@@ -31,7 +32,7 @@ export const PopupStyles = `
 
   .popup-header-component{
     width:100%;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     border-bottom:1px solid lightgrey;
     box-sizing:border-box;
     display:flex;
@@ -60,17 +61,39 @@ export const PopupStyles = `
     width:100%;
     padding:1rem;
   }
+  
+  .popup-content-rating{
+    width:100%;
+    display:flex;
+    justify-content:space-evenly;
+    gap:5px;
+  }
 
+  .popup-content-rating li{
+    background-color:  #d1d5db ;
+    padding:2px 6px;
+    border:2px solid #9ca3af;
+    border-radius:4px;
+  }
+
+  .popup-content-rating-selected{
+    background-color:#2c9af0 !important;
+    color:white;
+    border:2px solid #2c9af0 !important;
+  }
+  
   .popup-actions-component{
     width:100%;
-    padding:0 1rem 1rem 1rem;
+    padding:0 1rem;
     display:flex;
     justify-content:flex-end;
+    align-items:center;
     gap:1rem;
+    color:grey;
   }
 
 
-  .popup-actions-component > button{
+  .popup-actions-component >  button{
     all:unset;
     padding:4px 8px;
     border:1px solid #2c9af0;
@@ -78,4 +101,5 @@ export const PopupStyles = `
     font-weight:bold; 
     border-radius:4px;
   }
-`;
+  `;
+  

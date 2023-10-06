@@ -2,13 +2,32 @@ import { useEffect, useRef } from "react";
 import PopupContent from "./popup/PopupContent";
 import { usePopupDataContext } from "../context/PopupDataContextProvider";
 import { PopupStyles } from "./popup/PopupStyles";
+import { PopupScripts } from "./popup/Popup";
 
 export default function LiveWindow() {
   const { configData, flowData, popupType } = usePopupDataContext();
   const liveWindowRef = useRef<HTMLElement>(null);
   const styles = PopupStyles;
-
   const content = PopupContent({ flowData, popupType });
+  const scripts = PopupScripts(content);
+
+  const nextClassName = "popup-actions-component-next";
+  const ratingClassName = "popup-content-rating-button";
+
+  liveWindowRef.current?.addEventListener("click", function (event) {
+    if ((event.target as HTMLElement).classList.contains(nextClassName)) {
+      const mainSection = (event.target as HTMLElement).parentElement
+        ?.parentElement as HTMLElement;
+
+      if (mainSection.previousElementSibling) {
+        const previousItem = mainSection.previousElementSibling;
+        liveWindowRef.current?.insertBefore(mainSection, previousItem);
+      }
+    }
+    if ((event.target as HTMLElement).classList.contains(ratingClassName)) {
+      console.log((event.target as HTMLButtonElement).value);
+    }
+  });
 
   useEffect(() => {
     if (liveWindowRef.current) {
@@ -16,9 +35,9 @@ export default function LiveWindow() {
         const head = liveWindowRef.current
           .parentElement as NonNullable<HTMLHeadElement>;
 
-        const style = document.createElement("style");
-        style.innerHTML = styles;
-        head.appendChild(style);
+        const script = document.createElement("script");
+        script.innerHTML = scripts;
+        head.appendChild(script);
         liveWindowRef.current.innerHTML = content;
         liveWindowRef.current.className =
           "w-full pr-10 pl-5 py-10 flex items-center justify-center";

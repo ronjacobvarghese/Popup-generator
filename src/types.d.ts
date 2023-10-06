@@ -1,6 +1,6 @@
 
 export type PopupTypes = "Warning" | "Error" | "Survey";
-export type PopupContentTypes = "Options" | "Text" | "Rating" | "TextField" |"CheckList";
+export type PopupContentTypes = "Text" | "Rating" | "TextField";
 export type PopupActionType = "Submit" | "Continue";
 export type PopupLoadTypes = "onPageLoad" | "onButtonClick";
 

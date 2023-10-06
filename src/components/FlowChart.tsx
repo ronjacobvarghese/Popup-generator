@@ -17,23 +17,36 @@ export default function FlowChart() {
   const [data, setData] = useState(flowData);
 
   useEffect(() => {
+    // when you change the popup type the flow data resets hence inorder to add data again.
+    if (flowData.length === 0) {
+      setInitFlowStep(true);
+    }
     setData(flowData);
   }, [flowData]);
 
   const onSubmitStep = (flowDataItem: FlowData) => {
+    if (data.find((item) => item.id === flowDataItem.id)) {
+      setErrorMsg("Id of flow step must be unique");
+      return;
+    }
     setFlowData([...data, flowDataItem]);
     setInitFlowStep(false);
   };
 
   const onAddStep = (flowDataItem: FlowData) => {
-    if (!flowData.find((item) => item.id === flowDataItem.id)) {
+    // if you click the generate button once you don't need to add it again.
+    if (!data.find((item) => item.id === flowDataItem.id)) {
       setData((state) => [...state, flowDataItem]);
     }
     setInitFlowStep(true);
+    return;
   };
 
   const deleteFlowStep = (step: number) => {
-    console.log(step);
+    // here three scenarios can happen
+    // you delete the only step you have;
+    // you delete the step in between steps;
+    // you delete the final step;
     setFlowData((state) => state.filter((_item, index) => index !== step - 1));
     if (step !== 1 && step === data.length + 1) {
       setInitFlowStep(false);
@@ -73,7 +86,7 @@ export default function FlowChart() {
         {initFlowStep && (
           <FlowStep
             key={Math.random()}
-            step={flowData.length + 1}
+            step={data.length + 1}
             onSubmit={onSubmitStep}
             onAdd={onAddStep}
             popupType={type}

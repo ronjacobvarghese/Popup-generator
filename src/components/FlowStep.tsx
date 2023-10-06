@@ -44,8 +44,8 @@ export default function FlowStep({
   );
 
   const [optionsAnchor, setOptionsAnchor] = useState<null | HTMLElement>(null);
-  const [options, setOptions] = useState<string[]>([]);
-  const [option, setOption] = useState<string>("");
+  // const [options, setOptions] = useState<string[]>([]);
+  // const [option, setOption] = useState<string>("");
   const [addOptionsAnchor, setAddOptionsAnchor] = useState<null | HTMLElement>(
     null
   );
@@ -77,13 +77,13 @@ export default function FlowStep({
       return;
     }
 
-    if (
-      (contentType === "Options" || contentType === "CheckList") &&
-      !options
-    ) {
-      setError("Please enter valid options");
-      return;
-    }
+    // if (
+    //   (contentType === "Options" || contentType === "CheckList") &&
+    //   !options
+    // ) {
+    //   setError("Please enter valid options");
+    //   return;
+    // }
 
     const data = {
       id,
@@ -92,7 +92,7 @@ export default function FlowStep({
       contentType: contentType ? contentType : undefined,
       question,
       isRequired,
-      options,
+      // options,
     };
 
     if (generate) {
@@ -102,22 +102,22 @@ export default function FlowStep({
     }
   };
 
-  const onRemoveOptions = (deletedIndex: number) => {
-    setOptions((state) =>
-      state.filter((_item, index) => index !== deletedIndex)
-    );
-  };
+  // const onRemoveOptions = (deletedIndex: number) => {
+  //   setOptions((state) =>
+  //     state.filter((_item, index) => index !== deletedIndex)
+  //   );
+  // };
 
-  const onSubmitOptions = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!option.trim()) {
-      return;
-    }
+  // const onSubmitOptions = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (!option.trim()) {
+  //     return;
+  //   }
 
-    setOptions((state) => [...state, option]);
-    setOption("");
-    setAddOptionsAnchor(null);
-  };
+  //   setOptions((state) => [...state, option]);
+  //   setOption("");
+  //   setAddOptionsAnchor(null);
+  // };
 
   return (
     <li className="flex justify-between items-center min-w-max mb-6 py-2 ">
@@ -153,7 +153,7 @@ export default function FlowStep({
             </Select>
           </li>
         )}
-        {/* -------------------------Options Type----------------------------*/}
+        {/* -------------------------Options Type----------------------------
 
         {id && (contentType === "Options" || contentType === "CheckList") && (
           <li className="relative">
@@ -194,8 +194,8 @@ export default function FlowStep({
                   </MenuItem>
                 ))}
               </Menu>
-            </div>
-            <div>
+            </div> */}
+        {/* <div>
               <button
                 onClick={(e) => setAddOptionsAnchor(e.currentTarget)}
                 className="bg-gray-400/40 p-1 rounded-full"
@@ -223,7 +223,7 @@ export default function FlowStep({
               </Menu>
             </div>
           </li>
-        )}
+        )} */}
         {/* ---------------------Question/Message Type-----------------------*/}
 
         {id && (contentType || popupType !== "Survey") && (
