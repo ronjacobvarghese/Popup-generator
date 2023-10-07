@@ -8,7 +8,7 @@ import { useRef } from "react";
 
 function App() {
   const appRef = useRef<HTMLDivElement>(null);
-  const { configData, flowData, popupType } = usePopupDataContext();
+  const { configData, flowData } = usePopupDataContext();
 
   // const handleTest = () => {
   //   const content = PopupContent({ flowData, popupType });

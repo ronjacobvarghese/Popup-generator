@@ -63,7 +63,7 @@ export default function LiveWindow() {
       <Tabs
         sx={{ zIndex: "10", position: "absolute", top: "1rem", right: "0" }}
         value={tabs}
-        onChange={(e, newValue) => setTabs(newValue)}
+        onChange={(_e, newValue) => setTabs(newValue)}
       >
         <Tab sx={{ color: "rgb(156 163 175)" }} label="Overview" />
         <Tab sx={{ color: "rgb(156 163 175)" }} label="Code" />
