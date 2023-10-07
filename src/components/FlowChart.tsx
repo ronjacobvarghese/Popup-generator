@@ -81,6 +81,7 @@ export default function FlowChart() {
             onDelete={deleteFlowStep}
             setError={setErrorMsg}
             generate={!initFlowStep && flowData.length - 1 === index}
+            disable
           />
         ))}
         {initFlowStep && (

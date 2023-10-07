@@ -1,13 +1,8 @@
 import { useState } from "react";
 import Input from "./ui/Input";
 import Select from "./ui/Select";
-import { MenuItem, Switch, Menu } from "@mui/material";
-import {
-  FlowData,
-  PopupContentTypes,
-  PopupLoadTypes,
-  PopupTypes,
-} from "../types";
+import { MenuItem } from "@mui/material";
+import { FlowData, PopupContentTypes, PopupTypes } from "../types";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FaTrashCan } from "react-icons/fa6";
 
@@ -20,6 +15,7 @@ type Props = {
   onDelete: (step: number) => void;
   setError: React.Dispatch<React.SetStateAction<string>>;
   generate?: boolean;
+  disable?: boolean;
 };
 
 export default function FlowStep({
@@ -31,6 +27,7 @@ export default function FlowStep({
   onDelete,
   generate,
   setError,
+  disable,
 }: Props) {
   const [id, setId] = useState(flowData?.id ? flowData.id : "");
   // const [load, setLoad] = useState<PopupLoadTypes | "">(
@@ -127,7 +124,7 @@ export default function FlowStep({
         </li>
         <li>
           <p>Id:</p>
-          <Input value={id} setValue={setId} />
+          <Input disable={disable} value={id} setValue={setId} />
         </li>
 
         {/* -------------------Load Type And Content Type------------------*/}
@@ -144,7 +141,11 @@ export default function FlowStep({
         {id && popupType === "Survey" && (
           <li>
             <p> Content Type:</p>
-            <Select value={contentType} setChange={setContentType}>
+            <Select
+              disable={disable}
+              value={contentType}
+              setChange={setContentType}
+            >
               {/* <MenuItem value="Options"> Options </MenuItem> */}
               <MenuItem value="Text"> Text </MenuItem>
               <MenuItem value="Rating"> Rating </MenuItem>
@@ -234,6 +235,7 @@ export default function FlowStep({
                 : "Question:"}
             </p>
             <Input
+              disable={disable}
               value={question}
               setValue={setQuestion}
               length={48}
@@ -267,6 +269,7 @@ export default function FlowStep({
             <button
               onClick={() => onSubmitNewStep(false)}
               className="bg-gray-950 flex items-center gap-2 px-4 py-1 rounded-md shadow-gray-600/20 text-lg shadow-md"
+              disabled={disable}
             >
               <AiOutlinePlus /> Add
             </button>

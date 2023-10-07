@@ -2,6 +2,9 @@ import { PopupStyles } from "./PopupStyles";
 import { ConfigData } from '../../types';
 
 export const PopupScripts = (configData:ConfigData, content:string) => `
+
+let DB_URL; //<- insert DB API here
+
 const head = document.head;
 
 let time = \`${configData.time}\`;
@@ -33,17 +36,17 @@ setTimeout(() => {
 }, time);
 
 const nextClassName = "popup-actions-component-next";
+const backClassName = "popup-actions-component-back";
 const closeClassName = "popup-close-component";
 const ratingClassName = "popup-content-rating-button";
 const selectedRatingButtonClassName = "popup-content-rating-selected";
 const submitClassName = "popup-actions-component-submit";
-const textareaId = "#popup-content-textarea-component";
 
 const data = {};
 let answer = "";
 
 function repeatPopup() {
-  if (displayLimit === 0) {
+  if (displayLimit < 1) {
     return;
   }
   displayLimit -= 1;
@@ -62,14 +65,26 @@ div.addEventListener("click", function (event) {
       const previousItem = mainSection.previousElementSibling;
       data[event.target.value] = answer;
       answer = "";
-      div.insertBefore(mainSection, previousItem);
+      previousItem.style = "visibility:visible;"
+      mainSection.style = "visibility:hidden;"
+    }
+  }
+  if (event.target.classList.contains(backClassName)) {
+    const mainSection = event.target.parentElement?.parentElement;
+
+    if (mainSection.nextElementSibling) {
+      const nextItem = mainSection.nextElementSibling;
+      data[event.target.value] = answer;
+      answer = "";
+      nextItem.style = "visibility:visible;"
+      mainSection.style = "visibility:hidden;"
     }
   }
   if (event.target.classList.contains(ratingClassName)) {
     answer = event.target.value;
-    event.target.parentElement.classList.add(selectedRatingButtonClassName);
+    event.target.classList.add(selectedRatingButtonClassName);
     if (previousRatingButton) {
-      previousRatingButton.parentElement.classList.remove(
+      previousRatingButton.classList.remove(
         selectedRatingButtonClassName
       );
     }
@@ -78,21 +93,38 @@ div.addEventListener("click", function (event) {
 
   if (event.target.classList.contains(submitClassName)) {
     data[event.target.value] = answer;
+    if(DB_URL){
+    const requestOptions = {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    }
+
+    fetch(DB_URL, requestOptions)
+    .then(response => {
+        if (response.ok) {
+            console.log("Data posted successfully!");
+        } else {
+            console.error("Failed to post data to the database.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });}
+
     console.log(data);
     body.removeChild(div);
   }
 
   if (event.target.classList.contains(closeClassName)) {
-    console.log(1);
     repeatPopup();
     body.removeChild(div);
   }
 });
 
-const textarea = document.querySelector(textareaId);
-if (textarea) {
-  textarea.addEventListener("input", function () {
-    answer = textarea.value;
-  });
-}
+  div.addEventListener("input", function (event) {
+    answer = event.target.value;
+});
 `

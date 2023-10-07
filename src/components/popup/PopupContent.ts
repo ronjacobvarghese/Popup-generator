@@ -1,4 +1,4 @@
-import { PopupContents, svgs } from "../../lib/data";
+import { PopupContents, PopupFooters, PopupHeaders } from "../../lib/data";
 import { FlowData, PopupTypes } from "../../types";
 
 type Props = {
@@ -6,43 +6,17 @@ type Props = {
   popupType:PopupTypes | ""
 }
 export default function PopupContent({flowData, popupType}:Props) {
-  let svg:string;
-  if(popupType !== ""){
-    svg = svgs[popupType]
-  }
-  
-  console.log(flowData);
   let popups = flowData.map((item,index) => {
-    let question;
     
-    if(popupType === "Survey" && item.contentType!="Text"){
-      question = item.question
-    } else{
-      question = popupType;
-    }
-    
-    const header 
-        =`<div class = "popup-header-component">
-            ${svg}
-            <h1>${question}</h1>
-            <button class = "popup-close-component">${svgs['Close']}</button>
-          </div>`
-          
-    let content;
+    const header = PopupHeaders(popupType as PopupTypes,item);
+        
+    let content:string;
     
     if(popupType === "Survey"){
       if(item.contentType === "TextField"){
-        content = PopupContents["TextField"]
+        content = PopupContents["TextField"]();
       }else if(item.contentType === "Rating"){
-        let rating = ``;
-
-        [...Array(10).keys()].forEach((item) => { rating += `<li>
-        <button class = "popup-content-rating-button" value = "${item+1}">${item+1}</button>
-      </li>`})
-
-        content = `<ul class="popup-content-rating">
-          ${rating}
-        </ul>`
+        content = PopupContents['Rating']();
       } else{
         content = item.question;
       }
@@ -54,30 +28,17 @@ export default function PopupContent({flowData, popupType}:Props) {
         ${content}
       </div>`
 
-      let buttonContent = "Next";
-      let buttonClass = "next"
 
-      if(flowData.length == index+1){
-        buttonContent = "Submit";
-        buttonClass = "submit";
-      }
 
-      let footer;
+      let footer:string;
       if(popupType === "Survey"){
-      footer = `<footer style = "justify-content:space-between;"  class = "popup-actions-component">
-      <p>${index+1}/${flowData.length} Pages</p>
-        <button value = ${item.id} class = "popup-actions-component-${buttonClass}">${buttonContent}</button>
-      </footer>`    
+      footer = PopupFooters.Survey(index,flowData.length,item.id)
     } else{
-      footer = `<footer "  class = "popup-actions-component">
-      <div>
-      <button class = "popup-close-component">Ok</button>
-      </div>
-    </footer>`   
+      footer = PopupFooters.Default();
     }
       
     return `
-    <section key = ${item.id} class = "popup-root-component">
+    <section key = ${item.id} style = "visibility:${index !== 0 ? "hidden":"visible"}" class = "popup-root-component">
     ${header}
     ${contentContainer}
     ${footer}
