@@ -269,7 +269,6 @@ export default function FlowStep({
             <button
               onClick={() => onSubmitNewStep(false)}
               className="bg-gray-950 flex items-center gap-2 px-4 py-1 rounded-md shadow-gray-600/20 text-lg shadow-md"
-              disabled={disable}
             >
               <AiOutlinePlus /> Add
             </button>
