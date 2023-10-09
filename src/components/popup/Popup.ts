@@ -41,9 +41,11 @@ const closeClassName = "popup-close-component";
 const ratingClassName = "popup-content-rating-button";
 const selectedRatingButtonClassName = "popup-content-rating-selected";
 const submitClassName = "popup-actions-component-submit";
+const formOptionsId = "popup-options-form"
+const containsOptionsClassName = "popup-form-options-submit-component"
 
 const data = {};
-let answer = "";
+let answer = [];
 
 function repeatPopup() {
   if (displayLimit < 1) {
@@ -57,42 +59,54 @@ function repeatPopup() {
 
 let previousRatingButton;
 
-div.addEventListener("click", function (event) {
-  if (event.target.classList.contains(nextClassName)) {
-    const mainSection = event.target.parentElement?.parentElement;
 
+
+
+div.addEventListener("submit", function (event) {
+  event.preventDefault();
+    const formData = new FormData(event.target);
+    for (const [name,value] of formData){
+      answer.push(value);
+    }
+
+
+    const actionButton = event.submitter
+  if (actionButton.classList.contains(nextClassName)) {
+    const mainSection = event.target.parentElement;
+    
     if (mainSection.previousElementSibling) {
       const previousItem = mainSection.previousElementSibling;
-      data[event.target.value] = answer;
-      answer = "";
+      data[actionButton.value] = answer;
       previousItem.style = "visibility:visible;"
       mainSection.style = "visibility:hidden;"
+      answer = []
     }
   }
-  if (event.target.classList.contains(backClassName)) {
-    const mainSection = event.target.parentElement?.parentElement;
 
+  if (actionButton.classList.contains(backClassName)) {
+    const mainSection = event.target.parentElement
     if (mainSection.nextElementSibling) {
       const nextItem = mainSection.nextElementSibling;
-      data[event.target.value] = answer;
-      answer = "";
+      data[actionButton.value] = answer;
       nextItem.style = "visibility:visible;"
       mainSection.style = "visibility:hidden;"
+      answer = [];
     }
   }
-  if (event.target.classList.contains(ratingClassName)) {
-    answer = event.target.value;
-    event.target.classList.add(selectedRatingButtonClassName);
+  if (actionButton.classList.contains(ratingClassName)) {
+    answer.push(actionButton.value);
+    actionButton.classList.add(selectedRatingButtonClassName);
     if (previousRatingButton) {
       previousRatingButton.classList.remove(
         selectedRatingButtonClassName
       );
     }
-    previousRatingButton = event.target;
+    previousRatingButton = actionButton;
   }
 
-  if (event.target.classList.contains(submitClassName)) {
-    data[event.target.value] = answer;
+  if (actionButton.classList.contains(submitClassName)) {
+    data[actionButton.value] = answer;
+    answer = []
     if(DB_URL){
     const requestOptions = {
       method: "POST",
@@ -118,13 +132,9 @@ div.addEventListener("click", function (event) {
     body.removeChild(div);
   }
 
-  if (event.target.classList.contains(closeClassName)) {
+  if (actionButton.classList.contains(closeClassName)) {
     repeatPopup();
     body.removeChild(div);
   }
-});
-
-  div.addEventListener("input", function (event) {
-    answer = event.target.value;
 });
 `

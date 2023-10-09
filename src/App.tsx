@@ -7,7 +7,6 @@ import { usePopupDataContext } from "./context/PopupDataContextProvider";
 import { useRef } from "react";
 
 function App() {
-  const appRef = useRef<HTMLDivElement>(null);
   const { configData, flowData } = usePopupDataContext();
 
   // const handleTest = () => {
@@ -53,7 +52,7 @@ function App() {
     }
   };
   return (
-    <div ref={appRef} className="w-full h-full">
+    <>
       <Header
         save={(configData && flowData.length !== 0) || false}
         onSave={onSave}
@@ -68,7 +67,7 @@ function App() {
           <FlowChart />
         </div>
       </main>
-    </div>
+    </>
   );
 }
 

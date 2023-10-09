@@ -18,6 +18,10 @@ export default function PopupContent({flowData, popupType,visibleIndex}:Props) {
         content = PopupContents["TextField"]();
       }else if(item.contentType === "Rating"){
         content = PopupContents['Rating']();
+      }else if(item.contentType === "CheckList"){
+        content = PopupContents['CheckList'](item.id, item.options);
+      }else if(item.contentType === 'Options'){
+        content = PopupContents['Options'](item.id, item.options);
       } else{
         content = item.question;
       }
@@ -50,9 +54,12 @@ export default function PopupContent({flowData, popupType,visibleIndex}:Props) {
     } else {
       popup =  `
       <section key = ${item.id} style = "visibility:${index !== 0 ? "hidden":"visible"}" class = "popup-root-component">
+      
       ${header}
+      <form id = "popup-options-form-${item.id}">      
       ${contentContainer}
       ${footer}
+      </form>
       </section>`;  
     }
       

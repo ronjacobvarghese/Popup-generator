@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Input from "./ui/Input";
 import Select from "./ui/Select";
-import { MenuItem } from "@mui/material";
+import { Menu, MenuItem } from "@mui/material";
 import { FlowData, PopupContentTypes, PopupTypes } from "../types";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FaTrashCan } from "react-icons/fa6";
@@ -40,12 +40,14 @@ export default function FlowStep({
     flowData?.question ? flowData.question : ""
   );
 
-  // const [optionsAnchor, setOptionsAnchor] = useState<null | HTMLElement>(null);
-  // // const [options, setOptions] = useState<string[]>([]);
-  // // const [option, setOption] = useState<string>("");
-  // const [addOptionsAnchor, setAddOptionsAnchor] = useState<null | HTMLElement>(
-  //   null
-  // );
+  const [optionsAnchor, setOptionsAnchor] = useState<null | HTMLElement>(null);
+  const [options, setOptions] = useState<string[]>(
+    flowData?.options ? flowData.options : []
+  );
+  const [option, setOption] = useState<string>("");
+  const [addOptionsAnchor, setAddOptionsAnchor] = useState<null | HTMLElement>(
+    null
+  );
 
   // const [isRequired, setIsRequired] = useState(true);
 
@@ -74,13 +76,13 @@ export default function FlowStep({
       return;
     }
 
-    // if (
-    //   (contentType === "Options" || contentType === "CheckList") &&
-    //   !options
-    // ) {
-    //   setError("Please enter valid options");
-    //   return;
-    // }
+    if (
+      (contentType === "Options" || contentType === "CheckList") &&
+      !options
+    ) {
+      setError("Please enter valid options");
+      return;
+    }
 
     const data = {
       id,
@@ -89,7 +91,7 @@ export default function FlowStep({
       contentType: contentType ? contentType : undefined,
       question,
       // isRequired,
-      // options,
+      options,
     };
 
     if (generate) {
@@ -99,22 +101,22 @@ export default function FlowStep({
     }
   };
 
-  // const onRemoveOptions = (deletedIndex: number) => {
-  //   setOptions((state) =>
-  //     state.filter((_item, index) => index !== deletedIndex)
-  //   );
-  // };
+  const onRemoveOptions = (deletedIndex: number) => {
+    setOptions((state) =>
+      state.filter((_item, index) => index !== deletedIndex)
+    );
+  };
 
-  // const onSubmitOptions = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (!option.trim()) {
-  //     return;
-  //   }
+  const onSubmitOptions = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!option.trim()) {
+      return;
+    }
 
-  //   setOptions((state) => [...state, option]);
-  //   setOption("");
-  //   setAddOptionsAnchor(null);
-  // };
+    setOptions((state) => [...state, option]);
+    setOption("");
+    setAddOptionsAnchor(null);
+  };
 
   return (
     <li className="flex justify-between items-center min-w-max mb-6 py-2 ">
@@ -126,9 +128,7 @@ export default function FlowStep({
           <p>Id:</p>
           <Input disable={disable} value={id} setValue={setId} />
         </li>
-
         {/* -------------------Load Type And Content Type------------------*/}
-
         {/* {id && step === 1 && (
           <li>
             <p>Load Type:</p>
@@ -146,16 +146,15 @@ export default function FlowStep({
               value={contentType}
               setChange={setContentType}
             >
-              {/* <MenuItem value="Options"> Options </MenuItem> */}
               <MenuItem value="Text"> Text </MenuItem>
               <MenuItem value="Rating"> Rating </MenuItem>
+              <MenuItem value="Options"> Options </MenuItem>
               <MenuItem value="TextField"> Text Field </MenuItem>
-              {/* <MenuItem value="CheckList"> Check List </MenuItem> */}
+              <MenuItem value="CheckList"> Check List </MenuItem>
             </Select>
           </li>
         )}
-        {/* -------------------------Options Type----------------------------
-
+        {/* -------------------------Options Type---------------------------- */}
         {id && (contentType === "Options" || contentType === "CheckList") && (
           <li className="relative">
             <div className="relative">
@@ -189,15 +188,19 @@ export default function FlowStep({
                     }}
                   >
                     {item}
-                    <button onClick={() => onRemoveOptions(index)}>
+                    <button
+                      disabled={disable}
+                      onClick={() => onRemoveOptions(index)}
+                    >
                       <FaTrashCan />
                     </button>
                   </MenuItem>
                 ))}
               </Menu>
-            </div> */}
-        {/* <div>
+            </div>
+            <div>
               <button
+                disabled={disable}
                 onClick={(e) => setAddOptionsAnchor(e.currentTarget)}
                 className="bg-gray-400/40 p-1 rounded-full"
               >
@@ -224,9 +227,8 @@ export default function FlowStep({
               </Menu>
             </div>
           </li>
-        )} */}
+        )}
         {/* ---------------------Question/Message Type-----------------------*/}
-
         {id && (contentType || popupType !== "Survey") && (
           <li>
             <p>

@@ -1,6 +1,6 @@
 
 export type PopupTypes = "Warning" | "Error" | "Survey";
-export type PopupContentTypes = "Text" | "Rating" | "TextField";
+export type PopupContentTypes = "Text" | "Rating" | "TextField" | "CheckList" | "Options";
 export type PopupActionType = "Submit" | "Continue";
 export type PopupLoadTypes = "onPageLoad" | "onButtonClick";
 
@@ -10,7 +10,7 @@ export type FlowData = {
   // loadType?: PopupLoadTypes;
   question: string;
   contentType?: PopupContentTypes;
-  // options?: string[]
+  options?: string[]
   // isRequired?:boolean
 };
 

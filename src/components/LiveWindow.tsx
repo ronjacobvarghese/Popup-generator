@@ -11,9 +11,16 @@ export default function LiveWindow() {
   const liveWindowRef = useRef<HTMLElement>(null);
   const styles = PopupStyles;
   const [visibleIndex, setVisibleIndex] = useState(0);
+  const { length: flowDataLength } = flowData;
 
   const nextClassName = "popup-actions-component-next";
   const backClassName = "popup-actions-component-back";
+
+  useEffect(() => {
+    if (flowData) {
+      setVisibleIndex((state) => (state >= flowData.length ? 0 : state));
+    }
+  }, [flowData]);
 
   useEffect(() => {
     if (liveWindowRef.current) {
@@ -72,7 +79,7 @@ export default function LiveWindow() {
           " text-xl font-semibold text-gray-400/60 !w-full h-full pr-10 pl-5 flex items-center justify-center";
       }
     }
-  }, [flowData, configData, popupType, visibleIndex, tabs]);
+  }, [flowData, configData, popupType, visibleIndex, tabs, flowDataLength]);
 
   return (
     <div className="w-full h-full">

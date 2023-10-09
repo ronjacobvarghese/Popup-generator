@@ -1,4 +1,4 @@
-import { FlowData, PopupTypes } from '../types';
+import { FlowData, PopupContentTypes, PopupTypes } from '../types';
 
 type PopupOptions = {
   [index:string]:(...args:any) => string;
@@ -16,17 +16,40 @@ export const svgs = {
 
 export const PopupContents: PopupOptions = {
 
-  "TextField":() => `<textarea class = "popup-content-textarea-component" style="border:1px solid #dddddd; border-radius:4px;width:100%; padding:1rem; height:100px;"></textarea>`,
+  "TextField":() => `<textarea name = "text-area-component" "class = "popup-content-textarea-component" style="border:1px solid #dddddd; border-radius:4px;width:100%; padding:1rem; height:100px;"></textarea>`,
 
   "Rating": () => {
     let rating = ``;
       [...Array(10).keys()].forEach((item) => { rating += `<li>
-        <button class = "popup-content-rating-button" value = "${item+1}">${item+1}</button>
+        <button  name ="${item+1}" class = "popup-content-rating-button" value = "${item+1}">${item+1}</button>
       </li>`})
-
         return `<ul class="popup-content-rating">
           ${rating}
         </ul>`
+  },
+
+  "CheckList": (id:string, options:string[]) => {
+    let checkList = ``;
+    options.forEach((option,index) => {
+      checkList += `  <div>
+      <input type="checkbox" name="checkbox-${id}" value=${option} id="q${index+1}-${id}-option${index+1}">
+      <label for="q${index+1}-option${index+1}">${option}</label>
+  </div>`
+    })
+
+    return checkList
+  },
+
+  "Options": (id:string, options:string[]) => {
+    let selectOptions = ``;
+    options.forEach((option,index) => {
+      selectOptions += `  <div>
+      <input type="radio" name="options-${id}" value=${option} id="q${index+1}-${id}-option${index+1}">
+      <label for="q${index+1}-option${index+1}">${option}</label>
+  </div>`
+    })
+
+    return selectOptions
   }
 }
 
@@ -50,8 +73,9 @@ export const PopupHeaders = (popupType:PopupTypes,item:FlowData) => {
 }
 
 export const PopupFooters: PopupOptions= {
-  "Survey" : (index:number,totalLength:number,id:string,) =>{
+  "Survey" : (index:number,totalLength:number,id:string,contentType: PopupContentTypes) =>{
 
+    let isForm = "";
     let buttonContent = "Next";
     let buttonClass = "next"
 
@@ -60,12 +84,18 @@ export const PopupFooters: PopupOptions= {
       buttonClass = "submit";
     }
 
+    if(contentType === "CheckList" ||  contentType=== "Options"){
+      isForm = "popup-form-options-submit-component"
+    }
+
+
+
     return (
 `<footer style = "justify-content:space-between;" class="popup-actions-component">
 ${index!==0 ?
   `<button class = "popup-actions-component-back">Back</button>`:""}
   <p>${index+1}/${totalLength} Pages</p>
-    <button value = ${id} class = "popup-actions-component-${buttonClass}">${buttonContent}</button>
+    <button value = ${id} class = "popup-actions-component-${buttonClass}  ${isForm}">${buttonContent}</button>
   </footer>`  )  },
 
   "Default": () => `<footer "  class = "popup-actions-component">
