@@ -4,7 +4,6 @@ import Form from "./components/Form";
 import Header from "./components/Header";
 import LiveWindow from "./components/LiveWindow";
 import { usePopupDataContext } from "./context/PopupDataContextProvider";
-import { useRef } from "react";
 
 function App() {
   const { configData, flowData } = usePopupDataContext();
