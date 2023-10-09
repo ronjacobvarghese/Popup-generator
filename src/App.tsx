@@ -64,7 +64,7 @@ function App() {
           <Form />
           <LiveWindow />
         </div>
-        <div className="!px-10 flex-1">
+        <div className="!px-10 py-10 flex-1 max-h-[50%]">
           <FlowChart />
         </div>
       </main>

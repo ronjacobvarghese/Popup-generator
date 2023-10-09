@@ -10,21 +10,10 @@ export default function LiveWindow() {
   const [tabs, setTabs] = useState(0);
   const liveWindowRef = useRef<HTMLElement>(null);
   const styles = PopupStyles;
-  const content = PopupContent({ flowData, popupType });
+  const [visibleIndex, setVisibleIndex] = useState(0);
 
   const nextClassName = "popup-actions-component-next";
-
-  liveWindowRef.current?.addEventListener("click", function (event) {
-    if ((event.target as HTMLElement).classList.contains(nextClassName)) {
-      const mainSection = (event.target as HTMLElement).parentElement
-        ?.parentElement as HTMLElement;
-
-      if (mainSection.previousElementSibling) {
-        const previousItem = mainSection.previousElementSibling;
-        liveWindowRef.current?.insertBefore(mainSection, previousItem);
-      }
-    }
-  });
+  const backClassName = "popup-actions-component-back";
 
   useEffect(() => {
     if (liveWindowRef.current) {
@@ -37,10 +26,37 @@ export default function LiveWindow() {
           const style = document.createElement("style");
           style.innerHTML = styles;
           head.appendChild(style);
-          liveWindowRef.current.innerHTML = content;
+          liveWindowRef.current.innerHTML = PopupContent({
+            flowData,
+            popupType,
+            visibleIndex,
+          });
+
+          const handleClick = (event: MouseEvent) => {
+            if (
+              (event.target as HTMLElement).classList.contains(nextClassName)
+            ) {
+              setVisibleIndex((state) => state + 1);
+            }
+            if (
+              (event.target as HTMLElement).classList.contains(backClassName)
+            ) {
+              setVisibleIndex((state) => state - 1);
+            }
+            event.stopPropagation();
+          };
+
+          liveWindowRef.current?.addEventListener("click", handleClick, false);
+
           liveWindowRef.current.className =
             "w-full h-full pr-10 pl-5 flex items-center justify-center";
-          return;
+          return () => {
+            liveWindowRef.current?.removeEventListener(
+              "click",
+              handleClick,
+              false
+            );
+          };
         }
 
         if (!configData) {
@@ -56,7 +72,7 @@ export default function LiveWindow() {
           " text-xl font-semibold text-gray-400/60 !w-full h-full pr-10 pl-5 flex items-center justify-center";
       }
     }
-  }, [flowData, configData, content, tabs]);
+  }, [flowData, configData, popupType, visibleIndex, tabs]);
 
   return (
     <div className="w-full h-full">
@@ -70,7 +86,7 @@ export default function LiveWindow() {
       </Tabs>
       <div className="h-full w-full relative">
         <section hidden={tabs !== 0} ref={liveWindowRef}></section>
-        <Codepen hidden={tabs !== 1} content={content} />
+        <Codepen hidden={tabs !== 1} />
       </div>
     </div>
   );

@@ -4,8 +4,9 @@ import { FlowData, PopupTypes } from "../../types";
 type Props = {
   flowData:FlowData[];
   popupType:PopupTypes | ""
+  visibleIndex?:number
 }
-export default function PopupContent({flowData, popupType}:Props) {
+export default function PopupContent({flowData, popupType,visibleIndex}:Props) {
   let popups = flowData.map((item,index) => {
     
     const header = PopupHeaders(popupType as PopupTypes,item);
@@ -36,14 +37,26 @@ export default function PopupContent({flowData, popupType}:Props) {
     } else{
       footer = PopupFooters.Default();
     }
-      
-    return `
-    <section key = ${item.id} style = "visibility:${index !== 0 ? "hidden":"visible"}" class = "popup-root-component">
-    ${header}
-    ${contentContainer}
-    ${footer}
-    </section>`;
 
+    let popup;
+
+    if(visibleIndex !== undefined){
+      popup =  `
+      <section key = ${item.id} style = "visibility:${index !== visibleIndex ? "hidden":"visible"}" class = "popup-root-component">
+      ${header}
+      ${contentContainer}
+      ${footer}
+      </section>`;
+    } else {
+      popup =  `
+      <section key = ${item.id} style = "visibility:${index !== 0 ? "hidden":"visible"}" class = "popup-root-component">
+      ${header}
+      ${contentContainer}
+      ${footer}
+      </section>`;  
+    }
+      
+    return popup
   })
 
 

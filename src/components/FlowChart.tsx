@@ -56,7 +56,7 @@ export default function FlowChart() {
   };
 
   return (
-    <section className="text-white/70 p-5 w-full max-h-[90%] h-[90%] flex flex-col rounded-lg  border border-white/40 bg-gray-600/20 relative min-w-max my-5">
+    <section className="!m-0 text-white/70 p-5 w-full flex-1 max-h-full flex flex-col rounded-lg  border border-white/40 bg-gray-600/20 relative min-w-max my-5">
       <h3 className="text-xl p-2 pb-6 font-semibold border-b border-gray-600/30 mb-6">
         Flow Steps:
       </h3>
@@ -69,7 +69,7 @@ export default function FlowChart() {
         </Select>
         {errorMsg && <p className="text-xl text-red-600 pl-10">{errorMsg}</p>}
       </div>
-      <ul className="overflow-auto flex-1">
+      <ul className="overflow-auto  max-h-[90%]">
         {data.map((item, index) => (
           <FlowStep
             key={item.id}

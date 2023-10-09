@@ -2,20 +2,20 @@ import { useEffect, useState } from "react";
 import { FaRegCopy } from "react-icons/fa6";
 import { usePopupDataContext } from "../../context/PopupDataContextProvider";
 import { PopupScripts } from "../popup/Popup";
+import PopupContent from "../popup/PopupContent";
 
 type Props = {
   hidden: boolean;
-  content: string;
 };
-function Codepen({ hidden, content }: Props) {
-  const { flowData, configData } = usePopupDataContext();
+function Codepen({ hidden }: Props) {
+  const { flowData, configData, popupType } = usePopupDataContext();
   const [code, setCode] = useState<string>("");
 
   useEffect(() => {
     if (flowData.length !== 0 && configData) {
-      setCode(PopupScripts(configData, content));
+      setCode(PopupScripts(configData, PopupContent({ flowData, popupType })));
     }
-  }, [flowData, configData]);
+  }, [flowData, configData, popupType]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code).catch((err) => {
